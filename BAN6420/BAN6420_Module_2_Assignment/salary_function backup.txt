@@ -1,0 +1,64 @@
+# Importing libraries to inspect and visualize the employee salary dataset
+import numpy as np
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as mp
+%matplotlib inline
+
+# Load / Import the emp_salary_data file (ensure the file path is correct)
+df = pd.read_csv(r'C:\Users\Amazing\Documents\Msc_Data_Analytics\BAN6420\BAN6420_Module_2_Assignment\emp_salary_data.csv')
+
+# Inpect the Dataset Information
+df.info()
+
+# First few rows of the dataset
+df.head()
+
+# Display the shape of the dataset for the number of rows and columns
+print('This Dataset contains {} Rows and {} Columns'.format(df.shape[0], df.shape[1]))
+
+# Convert the imported employe data sheet columns to numeric type
+series_list = ['BasePay', 'OvertimePay', 'OtherPay', 'Benefits']
+for series in series_list:
+    df[series] = pd.to_numeric(df[series], errors='coerce')
+
+# Check, inspect and updating the DataFrame for the dataset information again
+df.info()
+
+# Display descriptive statistics for selected columns
+df[['BasePay','TotalPay','Benefits','OvertimePay','OtherPay','TotalPayBenefits']].describe()
+
+# Extracting the years Information in the dataset for unique years
+A = df['Year'].nunique()
+B = df['Year'].unique()
+print(f'The information of {A} years are available in the dataset: {B}')
+
+# Grouping and mean calculation for the individual year
+df.groupby('Year').mean()
+
+# KDE Plots visualization for the distribution of the TotalPay and BasePay
+sns.kdeplot(df['TotalPay'])
+mp.title('Distribution of Total Pay')
+mp.xlabel('Total Pay')
+mp.ylabel('Density')
+mp.show()
+
+sns.kdeplot(df['BasePay'])
+mp.title('Distribution of Base Pay')
+mp.xlabel('Base Pay')
+mp.ylabel('Density')
+mp.show()
+
+# Bar plot to show average for TotalPay by Year
+sns.barplot(data=df, x='Year', y='TotalPay')
+mp.title('Total Pay by Year')
+mp.xlabel('Year')
+mp.ylabel('Total Pay') 
+mp.show()
+
+# Groupby for Number of unique Job Titles by Year
+print(df.groupby('Year').nunique()['JobTitle'])
+
+import os
+current_path = os.getcwd()
+current_path
